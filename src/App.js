@@ -1,11 +1,8 @@
-
-
+import Body from "./components/Body";
 
 function App() {
   return (
-    <div className=" text-3xl bold bg-gray-300">
-      Not Rendered!!!
-    </div>
+    <Body/>
   );
 }
 
