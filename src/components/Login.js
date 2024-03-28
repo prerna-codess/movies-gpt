@@ -1,13 +1,21 @@
 import { useState, useRef } from "react";
+import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../utils/firebase";
 import Header from "./Header";
 import {checkValidity} from "../utils/validate";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
     const [isSignInForm, setIsSignInForm]= useState(true);
+    const [errorMessage, setErrorMessage]= useState(null);
     const email = useRef(null);
     const password = useRef(null);
     const name =  useRef(null);
-    const [errorMessage, setErrorMessage]= useState(null);
+    const navigate= useNavigate();
+    const dispatch = useDispatch();
+    
 
     const toggleSignInForm =()=>{
         setIsSignInForm(!isSignInForm);
@@ -15,14 +23,65 @@ const Login = () => {
     const handleButtonClick =() => {
         //Validate the form data
        
-        //console.log(email.current.value);
-        //console.log(password.current.value);
+        console.log(email.current.value);
+        console.log(password.current.value);
+        // console.log(name.current.value);
 
-        const message=checkValidity(name.current.value,email.current.value,password.current.value);
+        const message=checkValidity(email.current.value,password.current.value);
         //console.log(message);
         setErrorMessage(message);
+        // message present means data not present or wrong. hence, don't sign in/up
+        if(message) return;
+        
+        // else Sign/ Sign Up
+        if(!isSignInForm){
+            // Sign up logic
+            createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+            .then((userCredential) => {
+                // Signed up 
+                const user = userCredential.user;
+                updateProfile(user, {
+                    displayName: name.current.value, photoURL: "https://avatars.githubusercontent.com/u/133656308?v=4"
+                  }).then(() => {
+                    // Profile updated!
+                    const {uid, email, displayName, photoURL} = auth.currentUser;
+                    dispatch(addUser({uid:uid, email:email, displayName:displayName, photoURL: photoURL}));  
+                    navigate("/browse");
+                    // ...
+                  }).catch((error) => {
+                    // An error occurred
+                    setErrorMessage(error.message);
+                    // ...
+                  });
+                console.log(user);
+                
 
-        //Sign/ Sign Up
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                setErrorMessage(errorCode+"-"+errorMessage)
+                // ..
+            });
+
+        }
+        else{
+            // sign in logic
+            signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+                console.log(user);
+                navigate("/browse");
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                setErrorMessage(errorCode+"-"+errorMessage);
+            });
+        }
 
 
     }
