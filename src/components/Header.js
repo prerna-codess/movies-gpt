@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import {useDispatch} from "react-redux";
 import {addUser, removeUser} from "../utils/userSlice";
+import { LOGO } from "../utils/constants";
 
 const Header = () =>{
     const navigate = useNavigate();
@@ -46,13 +47,13 @@ const Header = () =>{
             <img 
                 className="w-44"
                 alt="app-logo" 
-                src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"/>
+                src = {LOGO}/>
         
             {user && <div className=" flex p-2">
                 <img
                     className="w-12 h-12 "
                     alt="user-icon" 
-                    src={user.photoURL}/>
+                    src={user?.photoURL}/>
                 <button 
                     onClick={handleSignOut}
                     className="font=bold text-white">Sign Out</button>
