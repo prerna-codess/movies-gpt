@@ -55,23 +55,23 @@ const Header = () =>{
     };
 
     return(
-        <div className=" flex absolute px-8 py-2 bg-gradient-to-b from-black z-10 w-screen justify-between">
+        <div className="  absolute px-8 py-2 bg-gradient-to-b from-black z-10 w-screen justify-between flex flex-col md:flex-row">
             <img 
-                className="w-44"
+                className="w-44 mx-auto md:mx-0"
                 alt="app-logo" 
                 src = {LOGO}/>
         
-            {user && (<div className=" flex p-2">
+            {user && (<div className=" flex p-2 justify-between">
 
                 {showGptSearch && <select className=" bg-black text-white p-2 m-2" onChange={handleLanguageChange}>
                     {SUPPORTED_LANGUAGES.map (lang =>  <option key={lang.indentifier} value={lang.indentifier}>{lang.name}</option>)}
                 </select>}
 
-                <button className="py-2 px-4 m-2 text-white" onClick={handleGPTSearchClick}>
+                <button className="py-2 px-4 m-2 text-white rounded-lg" onClick={handleGPTSearchClick}>
                     {showGptSearch?"Home":"GPT Search"}</button>
                 
                 <img
-                    className="w-12 h-12 "
+                    className="w-12 h-12 hidden md:block"
                     alt="user-icon" 
                     src={user?.photoURL}/>
 
