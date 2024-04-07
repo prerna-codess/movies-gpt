@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import lang from "../utils/languageConstants";
 import { useRef } from "react";
 import openai from "../utils/openai";
-import { API_OPTIONS } from "../utils/constants";
+import { API_OPTIONS, TMDB_API } from "../utils/constants";
 import {addGptMovieResult} from "../utils/gptSlice";
 
 const GptSearchBar = () =>{
@@ -16,7 +16,13 @@ const GptSearchBar = () =>{
             "https://api.themoviedb.org/3/search/movie?query=" +
               movie +
               "&include_adult=false&language=en-US&page=1",
-            API_OPTIONS
+              {
+                method: "GET",
+                headers: {
+                  accept: "application/json",
+                  Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZTlhM2EwNTBjNWZmN2UzMzQ5NzA3ZTNiNDEwMTFiOCIsInN1YiI6IjY2MDkyMTA1ZDRmZTA0MDE2MjI4OTAyNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.cFAsevg5MykUBrDxQllNwtI7nCrUO2R9sazbfgOsILY" ,
+                },
+              }
           );
           const json = await data.json();
       

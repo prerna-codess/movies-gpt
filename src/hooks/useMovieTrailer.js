@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { API_OPTIONS } from "../utils/constants";
+import { API_OPTIONS, TMDB_API } from "../utils/constants";
 import { addTrailerVideo } from "../utils/moviesSlice";
 
 const useMovieTrailer = (movieId) => {
@@ -12,7 +12,13 @@ const useMovieTrailer = (movieId) => {
       "https://api.themoviedb.org/3/movie/" +
         movieId +
         "/videos?language=en-US",
-        API_OPTIONS
+        {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            Authorization: "Bearer " + TMDB_API,
+          },
+        }
     );
     const json = await data.json();
     

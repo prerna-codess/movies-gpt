@@ -4,7 +4,7 @@ import VideoBackground from "./VideoBackground";
 
 const MainContainer =() =>{
     const movies = useSelector(store => store.movies?.nowPlayingMovies);
-    if(movies === null) return; //early return
+    if (!movies || movies.length === 0) return null; // early return if movies is undefined or empty
     const mainMovie = movies[0];
     const {original_title, overview, id }= mainMovie;
     return <div className=" pt-[30%] md:pt-0 bg-black">
